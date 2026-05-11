@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from .cold_storage import ColdStorage
-from .compression_log import CompressionLog, CompressionEntry
+from .compression_log import CompressionEntry, CompressionLog
 
 logger = logging.getLogger(__name__)
 

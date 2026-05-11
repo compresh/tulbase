@@ -45,8 +45,7 @@ def _load_ml_model():
     """Background: load DeBERTa prompt injection classifier."""
     global _ml_classifier, _ml_tokenizer, _ml_loading, _ml_error
     try:
-        from transformers import AutoTokenizer, AutoModelForSequenceClassification
-        import torch
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         model_name = "protectai/deberta-v3-base-prompt-injection-v2"
         cache_dir = os.environ.get("SEMANTIC_CACHE_MODEL_DIR", None)

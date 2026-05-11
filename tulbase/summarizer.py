@@ -174,8 +174,8 @@ class Tier1Summarizer:
     def _try_load_lexrank(self):
         """Try to import sumy LexRank. Returns a callable or None."""
         try:
-            from sumy.parsers.plaintext import PlaintextParser  # type: ignore
             from sumy.nlp.tokenizers import Tokenizer  # type: ignore
+            from sumy.parsers.plaintext import PlaintextParser  # type: ignore
             from sumy.summarizers.lex_rank import LexRankSummarizer  # type: ignore
 
             def _run(text: str, n: int) -> list[str]:

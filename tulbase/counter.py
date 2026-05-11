@@ -1,6 +1,5 @@
 import tiktoken
 
-
 # Cache encoders per model
 _encoders: dict[str, tiktoken.Encoding] = {}
 

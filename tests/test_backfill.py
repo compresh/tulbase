@@ -16,7 +16,6 @@ from tulbase.backfill import Backfiller, _normalize_message, backfill_messages
 from tulbase.cold_storage import ColdStorage
 from tulbase.compression_log import CompressionLog
 
-
 # ---------------------------------------------------------------------------
 # Pure-function tests — no DB needed
 # ---------------------------------------------------------------------------

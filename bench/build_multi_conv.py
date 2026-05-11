@@ -146,7 +146,7 @@ def build(src_path: Path, out_path: Path) -> dict:
     print(f"  Total messages: {len(merged_messages)}")
     print(f"  Total chars:    {out['total_chars']:,}")
     print(f"  Transitions at: {out['_transition_turn_indices']}")
-    print(f"\nBlocks:")
+    print("\nBlocks:")
     for b in blocks:
         print(
             f"  {b['label']:25s} T{b['starts_at_turn']:3d}..T{b['ends_at_turn']:3d}  "

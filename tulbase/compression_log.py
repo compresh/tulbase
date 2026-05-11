@@ -9,7 +9,8 @@ Schema (from phase22-spec.md):
     id              TEXT PRIMARY KEY     -- compr-{session_id}-{turn}-{modality}-{counter}
     session_id      TEXT NOT NULL
     turn_idx        INTEGER NOT NULL
-    modality        TEXT NOT NULL        -- code | terminal_output | json_dump | image | doc | quote_detail
+    modality        TEXT NOT NULL        -- code | terminal_output | json_dump
+    -- | image | doc | quote_detail
     summary         TEXT NOT NULL
     reason          TEXT NOT NULL
     hash            TEXT NOT NULL        -- sha256 of original content

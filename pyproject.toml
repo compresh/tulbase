@@ -75,6 +75,7 @@ select = ["E", "F", "I", "W"]
 "tulbase/injection.py" = ["E501"]
 "examples/*.py" = ["E501"]
 "tests/*.py" = ["E501"]
+"bench/*.py" = ["E501"]   # bench markdown table headers can be long
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

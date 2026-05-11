@@ -20,7 +20,8 @@ class Settings:
     # Injection detection
     INJECTION_ENABLED: bool = os.getenv("TULBASE_INJECTION", "true").lower() == "true"
     INJECTION_THRESHOLD: float = float(os.getenv("TULBASE_INJECTION_THRESHOLD", "0.70"))
-    INJECTION_ACTION: str = os.getenv("TULBASE_INJECTION_ACTION", "sanitize")  # sanitize | block | log
+    # sanitize | block | log
+    INJECTION_ACTION: str = os.getenv("TULBASE_INJECTION_ACTION", "sanitize")
 
     # Compression
     # aggressive | balanced | conservative | none

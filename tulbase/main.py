@@ -7,10 +7,12 @@ or
 """
 
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from tulbase.router import router as proxy_router, close_client
+from tulbase.router import close_client
+from tulbase.router import router as proxy_router
 
 
 @asynccontextmanager

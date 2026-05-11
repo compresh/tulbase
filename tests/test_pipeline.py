@@ -19,7 +19,6 @@ from tulbase.retrieval import Retriever
 from tulbase.summarizer import Tier1Summarizer
 from tulbase.turn_box import render_markdown
 
-
 SAMPLE_TURN = """\
 Phase 2.1 v3 deploy script hazırlandı. Şu şekilde:
 
