@@ -1,20 +1,20 @@
-# Contributing to Pith
+# Contributing to Tulbase
 
-Thanks for your interest in contributing! Pith is an open-core project — the core proxy, rule-based optimizer, and injection detection are open source.
+Thanks for your interest in contributing! Tulbase is an open-core project — the core proxy, rule-based optimizer, and injection detection are open source.
 
 ## Ways to contribute
 
 ### Injection patterns
-The most impactful contribution: add injection detection patterns for new languages or new attack vectors. See `pith/injection.py` — each pattern is a tuple of (regex, name, score).
+The most impactful contribution: add injection detection patterns for new languages or new attack vectors. See `tulbase/injection.py` — each pattern is a tuple of (regex, name, score).
 
 ### Optimization rules
-Add verbose phrase replacements or filler word lists for new languages. See `pith/optimizer.py` — patterns are organized by language.
+Add verbose phrase replacements or filler word lists for new languages. See `tulbase/optimizer.py` — patterns are organized by language.
 
 ### Integration examples
-Show how Pith works with your favorite framework or tool. Add to `examples/`.
+Show how Tulbase works with your favorite framework or tool. Add to `examples/`.
 
 ### Bug reports
-Open an issue with steps to reproduce. Include your Python version and Pith version.
+Open an issue with steps to reproduce. Include your Python version and Tulbase version.
 
 ### Skills & extensions
 Build integrations for new platforms (VS Code, Cursor, n8n, etc.). See `examples/` for patterns.
@@ -22,8 +22,8 @@ Build integrations for new platforms (VS Code, Cursor, n8n, etc.). See `examples
 ## Development setup
 
 ```bash
-git clone https://github.com/pithtkn-tech/pith.git
-cd pith
+git clone https://github.com/tulbasetkn-tech/tulbase.git
+cd tulbase
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -57,8 +57,8 @@ Keep PRs focused on a single change. Include tests for new patterns.
 
 ## What stays closed
 
-These components are proprietary (Pith Cloud):
-- Pith Distill compression algorithm
+These components are proprietary (Tulbase Cloud):
+- Tulbase Distill compression algorithm
 - ML model fine-tuning and training data
 - Dashboard and analytics backend
 - Billing and authentication systems

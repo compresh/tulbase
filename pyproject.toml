@@ -3,22 +3,22 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pith"
-version = "0.1.0"
-description = "LLM API proxy with prompt optimization & injection protection. Supports 200+ models."
+name = "tulbase"
+version = "0.2.0"
+description = "Depth-aware context compression for LLM proxies. Turn-box marker format with epistemic transparency."
 readme = "README.md"
-license = {text = "Apache-2.0"}
+license = {text = "MIT"}
 requires-python = ">=3.9"
-authors = [{name = "PithToken Ltd", email = "hello@pithtoken.ai"}]
+authors = [{name = "Compresh Ltd", email = "hello@compre.sh"}]
 keywords = [
-    "ai", "llm", "proxy", "openai", "anthropic", "optimization",
-    "prompt-compression", "injection-detection", "token-savings",
-    "agent", "mcp", "langchain", "crewai",
+    "llm", "proxy", "context-compression", "turn-box",
+    "depth-aware", "prompt-engineering", "openai", "anthropic",
+    "episodic-memory", "injection-detection",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -31,16 +31,18 @@ dependencies = [
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
     "httpx>=0.24.0",
+    "duckdb>=0.9.0",
 ]
 
 [project.optional-dependencies]
 tiktoken = ["tiktoken>=0.5.0"]
-keybert = ["keybert>=0.8.0"]
-ml = [
+injection = [
     "torch>=2.0.0",
     "transformers>=4.30.0",
-    "llmlingua>=0.2.0",
-    "keybert>=0.8.0",
+]
+summarizer = [
+    "sumy>=0.11.0",
+    "nltk>=3.8.0",
 ]
 dev = [
     "pytest>=7.0",
@@ -50,17 +52,17 @@ dev = [
 ]
 
 [project.scripts]
-pith = "pith.cli:main"
+tulbase = "tulbase.cli:main"
 
 [project.urls]
-Homepage = "https://pithtoken.ai"
-Documentation = "https://pithtoken.ai/docs"
-Repository = "https://github.com/pithtkn-tech/pith"
-Issues = "https://github.com/pithtkn-tech/pith/issues"
-Changelog = "https://github.com/pithtkn-tech/pith/blob/main/CHANGELOG.md"
+Homepage = "https://compre.sh"
+Documentation = "https://compre.sh/docs"
+Repository = "https://github.com/compresh/tulbase"
+Issues = "https://github.com/compresh/tulbase/issues"
+Changelog = "https://github.com/compresh/tulbase/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
-include = ["pith*"]
+include = ["tulbase*"]
 
 [tool.ruff]
 line-length = 100
@@ -70,10 +72,9 @@ target-version = "py39"
 select = ["E", "F", "I", "W"]
 
 [tool.ruff.lint.per-file-ignores]
-"pith/injection.py" = ["E501"]   # regex patterns are inherently long
-"pith/optimizer.py" = ["E501"]   # replacement rule tuples are inherently long
-"examples/*.py" = ["E501"]       # example code prioritizes readability
-"tests/*.py" = ["E501"]          # test strings can be long
+"tulbase/injection.py" = ["E501"]
+"examples/*.py" = ["E501"]
+"tests/*.py" = ["E501"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -1,137 +1,55 @@
-# Pith Benchmark — 1,008 Tests
+# tulbase bench
 
-Independent benchmark of Pith's compression pipeline across 1,008 test scenarios.
+Reproducible benchmark suite for depth-aware context compression.
 
-**Date:** April 19-20, 2026  
-**Server:** Production (api.pithtoken.ai)  
-**Models:** GPT-4o-mini, Claude Haiku 4.5  
-**Judges:** Dual blind LLM evaluation (GPT-4o-mini + Claude Haiku, direct API — not through Pith)
+## What's here
 
----
+| File | Purpose |
+|---|---|
+| `runner.py` | Turn-by-turn raw vs compresh dual-context inference |
+| `judge_groq.py` | Groq Llama judge with MiniLM cosine similarity |
+| `aggregate.py` | Build comparison report from judged JSONL |
+| `build_multi_conv.py` | Assemble multi-conv LMSYS-Chat-1M dataset |
+| `select_longest.py` | Pick the longest English conversation |
+| `verify_openrouter_models.py` | Sanity-check OpenRouter model IDs |
+| `run_fas1a.sh` | One-command bench across 7 OpenRouter models |
 
-## Summary
+## Quick start
 
-| Phase | Tests | What it measures |
-|-------|-------|-----------------|
-| ISO | 424 | Rule-based optimizer alone (18 categories) |
-| E2E | 284 | Full pipeline: optimizer + LLMLingua + conversation compression |
-| Judge | 300 | Per-turn quality preservation via dual LLM judges |
-| **Total** | **1,008** | |
+```bash
+# Build the 5-block multi-conv dataset
+python bench/build_multi_conv.py --output bench/data/lmsys_multi_conv.json
 
-### Key results
+# Verify your OpenRouter model IDs
+python bench/verify_openrouter_models.py
 
-- **ISO layer:** 7.9% mean compression, <1ms latency
-- **Full pipeline:** 33.8% mean compression, 0.85 cosine similarity
-- **Deep conversations (turns 8-15):** 69-77% compression, judge score 3.36-3.42/5 (3.0 = equivalent quality)
-- **Quality preservation:** 87.7% of compressed responses score ≥3.0 (no degradation)
-- **Compression scales with depth** — the longer the conversation, the more tokens saved, with no quality loss
+# Run the multi-model bench (3-5 hours, ~$10 OpenRouter cost)
+bash bench/run_fas1a.sh
 
----
-
-## Directory structure
-
-```
-bench/
-├── README.md                              ← you are here
-└── results/
-    ├── metadata.json                      ← test configuration
-    ├── iso/
-    │   └── iso_results.jsonl              ← 424 ISO layer results
-    ├── e2e/
-    │   └── e2e_all.jsonl                  ← 284 end-to-end results
-    ├── judge/
-    │   ├── judge_depth_results.jsonl      ← 300 per-turn judge evaluations
-    │   ├── judge_summary.json             ← aggregate judge stats
-    │   ├── judge_compression_vs_quality.png
-    │   ├── judge_cosine_depth.png
-    │   ├── judge_depth_bands.png
-    │   └── judge_per_model.png
-    └── analysis/
-        ├── BENCHMARK_REPORT.md            ← full report with tables
-        ├── summary_stats.json             ← machine-readable summary
-        ├── depth_curve.json               ← compression vs depth data
-        ├── compression_summary.png
-        └── compression_vs_depth.png
+# Judge + aggregate
+for f in bench/results/multi-*-tulbase-*.jsonl; do
+  python bench/judge_groq.py --pairs "$f" \
+    --output "${f%.jsonl}-judged.jsonl"
+done
+python bench/aggregate.py \
+  --judged-files bench/results/multi-*-judged.jsonl \
+  --output bench/results/comparison.md
 ```
 
----
+## Required env vars
 
-## Data formats
+- `OPENROUTER_API_KEY` — for the multi-model bench
+- `GROQ_API_KEY` — for the judge (Llama 3.3 70B)
+- `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` — if running Anthropic /
+  OpenAI directly
 
-### ISO results (`iso_results.jsonl`)
+## Method
 
-Each line is one test — a single prompt category evaluated for rule-based compression:
+The bench uses sert (no drift bridge) concat of 5 LMSYS conversations
+spanning code-heavy debugging, persona, financial analysis, opinion
+rating, and JS debugging — 288 messages total. Every user turn is asked
+twice: once with raw history, once with tulbase-compressed history. The
+judge then rates whether the two answers are functionally equivalent.
 
-```json
-{
-  "category": "coding",
-  "compression_ratio": 0.103,
-  "original_tokens": 245,
-  "compressed_tokens": 220
-}
-```
-
-### E2E results (`e2e_all.jsonl`)
-
-Each line is one end-to-end test — full pipeline with conversation depth:
-
-```json
-{
-  "category": "depth_t10",
-  "model": "gpt-4o-mini",
-  "compression_ratio": 0.691,
-  "cosine_similarity": 0.827,
-  "latency_ms": 1805,
-  "turns": 10
-}
-```
-
-### Judge results (`judge_depth_results.jsonl`)
-
-Each line is one per-turn evaluation — dual LLM judges score the compressed response:
-
-```json
-{
-  "turn": 8,
-  "mode": "balanced",
-  "model": "gpt-4o-mini",
-  "compression_pct": 60.9,
-  "judge_gpt": 3.5,
-  "judge_claude": 3.1,
-  "judge_avg": 3.3,
-  "cosine": 0.814
-}
-```
-
-**Judge scale:** 1 = much worse, 2 = somewhat worse, 3 = equivalent, 4 = somewhat better, 5 = much better
-
----
-
-## Compression vs. depth
-
-| Depth band | Compression (balanced) | Compression (aggressive) | Judge score |
-|------------|----------------------|------------------------|-------------|
-| Early (turns 1-3) | 3.7% | 3.8% | 3.28 |
-| Mid (turns 4-7) | 41.7% | 64.4% | 3.37 |
-| Deep (turns 8-15) | 69.1% | 76.9% | 3.39 |
-
-Compression increases with conversation depth. Quality remains constant.
-
----
-
-## Reproduce
-
-These results were generated against Pith's production API. The test harness used:
-
-1. **LMSYS-Chat-1M** prompts (curated multi-turn conversations)
-2. **Three compression modes:** conservative, balanced, aggressive
-3. **Two models:** GPT-4o-mini, Claude Haiku 4.5
-4. **Dual blind judging:** Both judges evaluate without knowing which response is compressed
-
-Full methodology: [`results/analysis/BENCHMARK_REPORT.md`](results/analysis/BENCHMARK_REPORT.md)
-
----
-
-## License
-
-Benchmark data is released under Apache 2.0, same as the main project.
+Result: **~25-43 % cost saving across providers, equivalence rate stays
+flat with depth.** Full numbers in [`results/`](results/).

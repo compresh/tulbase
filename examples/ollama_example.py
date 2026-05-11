@@ -1,12 +1,12 @@
 """
-Example: Using Pith with Ollama (local LLM).
+Example: Using Tulbase with Ollama (local LLM).
 
 1. Start Ollama: ollama serve
-2. Set env: PITH_DEFAULT_BASE_URL=http://localhost:11434/v1
-3. Start Pith: pith serve
+2. Set env: TULBASE_DEFAULT_BASE_URL=http://localhost:11434/v1
+3. Start Tulbase: tulbase serve
 4. Run: python examples/ollama_example.py
 
-Pith optimizes prompts even for local models — effectively
+Tulbase optimizes prompts even for local models — effectively
 extending your context window by 10-20%.
 """
 

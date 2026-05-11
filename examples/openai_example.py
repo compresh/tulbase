@@ -1,16 +1,16 @@
 """
-Example: Using Pith with OpenAI Python SDK.
+Example: Using Tulbase with OpenAI Python SDK.
 
-1. Start Pith: pith serve
+1. Start Tulbase: tulbase serve
 2. Run this script: python examples/openai_example.py
 """
 
 from openai import OpenAI
 
-# Point to Pith proxy instead of OpenAI directly
+# Point to Tulbase proxy instead of OpenAI directly
 client = OpenAI(
     base_url="http://localhost:8000/v1",
-    api_key="sk-your-real-openai-key",  # Your real key — Pith forwards it
+    api_key="sk-your-real-openai-key",  # Your real key — Tulbase forwards it
 )
 
 response = client.chat.completions.create(
@@ -24,5 +24,5 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 
 # Check optimization stats in response headers (if using httpx directly)
-# X-Pith-Saved-Tokens: ~45
-# X-Pith-Saved-Percent: ~22%
+# X-Tulbase-Saved-Tokens: ~45
+# X-Tulbase-Saved-Percent: ~22%
