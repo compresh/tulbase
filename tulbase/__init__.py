@@ -2,6 +2,18 @@
 
 from .backfill import Backfiller, BackfillResult, backfill_messages
 from .cold_storage import ColdStorage
+from .compose import (
+    DEFAULT_MODE as DEFAULT_PROTECTION_MODE,
+)
+from .compose import (
+    PROTECTION_ZONE_N,
+    ComposedHistory,
+    ProtectionMode,
+    compose_compresh_history,
+    compose_compresh_system,
+    iter_protection_modes,
+    resolve_n,
+)
 from .compression_log import CompressionEntry, CompressionLog
 from .modality import Segment, classify, resolve_overlaps
 from .pipeline import Pipeline, PipelineResult
@@ -40,6 +52,14 @@ __all__ = [
     "Retriever", "RetrievalResult",
     "Pipeline", "PipelineResult",
     "Backfiller", "BackfillResult", "backfill_messages",
+    "resolve_n",
+    "iter_protection_modes",
+    "compose_compresh_system",
+    "compose_compresh_history",
+    "ProtectionMode",
+    "PROTECTION_ZONE_N",
+    "DEFAULT_PROTECTION_MODE",
+    "ComposedHistory",
     "Channel", "CHANNEL_VALUES", "Provenance",
     "TrustLevel", "TRUST_VALUES", "default_trust", "to_pipeline_speaker",
     "HONESTY_SYSTEM_PROMPT", "HONESTY_SYSTEM_PROMPT_MINI",
